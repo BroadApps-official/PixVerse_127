@@ -32,7 +32,7 @@ struct TemplateCardView: View {
                 .frame(height: 60)
                 if let title = template.title {
                     Text(title)
-                        .font(.custom("SpaceGrotesk-Light_Medium", size: 15))
+                        .font(.system(size: 15))
                         .foregroundColor(.white)
                         .padding(.horizontal, 12)
                         .padding(.bottom, 12)
@@ -40,5 +40,6 @@ struct TemplateCardView: View {
             }
         }
         .frame(width: 175, height: 311)
+        .cornerRadius(8)
     }
 } 

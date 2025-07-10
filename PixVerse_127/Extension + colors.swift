@@ -1,11 +1,3 @@
-//
-//  Extension + colors.swift
-//  Higgsfield
-//
-//  Created by Денис Николаев on 17.06.2025.
-//
-
-
 import SwiftUI
 
 extension Color {
@@ -33,7 +25,7 @@ extension Color {
         )
     }
     
-    static let accentColor = Color(hex: "D1FE17")
+    static let accentColor = Color.white
     
     static let customBackground = Color.black
     static let customText = Color.white
@@ -41,7 +33,7 @@ extension Color {
     static let customDivider = Color.white.opacity(0.24)
     
     static let segmentSelectedBackground = Color(hex: "D1FE17").opacity(0.12)
-    static let segmentUnselectedBackground = Color.black.opacity(0.94)
+    static let segmentUnselectedBackground = Color.black.opacity(0.92)
     
     static let bannerGradient = LinearGradient(
         gradient: Gradient(colors: [.clear, .black.opacity(0.8)]),

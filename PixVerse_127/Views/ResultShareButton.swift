@@ -8,11 +8,11 @@ struct ResultShareButton: View {
                 Image(systemName: "square.and.arrow.up")
                 Text("Share")
             }
-            .font(.custom("SpaceGrotesk-Light_Bold", size: 17))
+            .font(.system(size: 17))
             .foregroundColor(.black)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(Color(hex: "#D1FE17"))
+            .background(.white)
             .cornerRadius(16)
         }
         .padding(.horizontal, 16)

@@ -31,25 +31,25 @@ struct MCPPromptView: View {
                             .fill(Color.white.opacity(0.08))
                         CustomTextEditorContainer(text: $promptText)
                         if promptText.isEmpty {
-                            Text("Enter your prompt...")
-                                .font(.custom("SpaceGrotesk-Light_Regular", size: 16))
+                            Text("Type in what you want to see")
+                                .font(.system(size: 16))
                                 .foregroundColor(.white.opacity(0.25))
                                 .padding(.top, 16)
                                 .padding(.horizontal, 14)
                         }
                     }
-                    .frame(height: 120)
+                    .frame(height: 240)
                     .padding(.horizontal, 16)
                     .padding(.top, 12)
 
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
                             Text("Use a photo")
-                                .font(.custom("SpaceGrotesk-Light_Bold", size: 20))
+                                .font(.system(size: 16))
                                 .foregroundColor(.white)
                             Spacer()
                             Toggle("", isOn: $usePhoto)
-                                .toggleStyle(SwitchToggleStyle(tint: Color(red: 0.78, green: 1.0, blue: 0.29)))
+                                .toggleStyle(SwitchToggleStyle(tint: .white))
                         }
 
                         if usePhoto {
@@ -71,13 +71,13 @@ struct MCPPromptView: View {
                                                 .clipShape(RoundedRectangle(cornerRadius: 20))
                                                 .overlay(
                                                     RoundedRectangle(cornerRadius: 20)
-                                                        .stroke(Color(hex: "#D1FE17"), style: StrokeStyle(lineWidth: 3, dash: [8]))
+                                                        .stroke(Color(hex: "#9D3AE9"), style: StrokeStyle(lineWidth: 3, dash: [8]))
                                                 )
                                                 .overlay(
                                                     Image(systemName: "arrow.2.circlepath")
                                                         .resizable()
                                                         .frame(width: 32, height: 32)
-                                                        .foregroundColor(Color(hex: "#D1FE17"))
+                                                        .foregroundColor(Color(hex: "#9D3AE9"))
                                                         .background(Color.black.opacity(0.6))
                                                         .clipShape(Circle())
                                                         .padding(6),
@@ -89,14 +89,14 @@ struct MCPPromptView: View {
                                                 .frame(width: 96, height: 96)
                                                 .overlay(
                                                     RoundedRectangle(cornerRadius: 16)
-                                                        .stroke(Color(hex: "#D1FE17"), style: StrokeStyle(lineWidth: 2, dash: [6]))
+                                                        .stroke(Color(hex: "#9D3AE9"), style: StrokeStyle(lineWidth: 2, dash: [6]))
                                                 )
                                                 .overlay(
                                                     Image(systemName: "plus")
                                                         .resizable()
                                                         .scaledToFit()
                                                         .frame(width: 32, height: 32)
-                                                        .foregroundColor(Color(hex: "#D1FE17"))
+                                                        .foregroundColor(Color(hex: "#9D3AE9"))
                                                 )
                                         }
                                     }
@@ -114,7 +114,7 @@ struct MCPPromptView: View {
                     if let error = errorMessage {
                         Text(error)
                             .foregroundColor(.red)
-                            .font(.custom("SpaceGrotesk-Light_Regular", size: 15))
+                            .font(.system(size: 15))
                             .padding(.horizontal, 20)
                             .padding(.bottom, 8)
                     }
@@ -132,16 +132,15 @@ struct MCPPromptView: View {
                 }) {
                     HStack {
                         Spacer()
-                        Image(systemName: "sparkles")
+                        Image(systemName: "scribble.variable")
                         Text("Generate")
-                            .font(.custom("SpaceGrotesk-Light_Bold", size: 17))
-                            .foregroundColor((promptText.isEmpty || promptText.count > 300) ? .black : .black)
+                            .font(.system(size: 17))
                         Spacer()
                     }
-                    .foregroundColor(.black)
+                    .foregroundColor((promptText.isEmpty || promptText.count > 300) ? .white.opacity(0.5) : .black)
                     .padding(.vertical, 18)
-                    .background((promptText.isEmpty || promptText.count > 300 || (usePhoto && selectedPhoto == nil)) ? Color.accentColor.opacity(0.4) : Color.accentColor)
-                    .cornerRadius(18)
+                    .background((promptText.isEmpty || promptText.count > 300 || (usePhoto && selectedPhoto == nil)) ? .gray.opacity(0.3) : .white)
+                    .cornerRadius(16)
                     .padding(.horizontal, 16)
                 }
                 .disabled(promptText.isEmpty || promptText.count > 300 || (usePhoto && selectedPhoto == nil) || isGenerating)
@@ -158,19 +157,13 @@ struct MCPPromptView: View {
             GenerationLoadingView()
         }
         .fullScreenCover(isPresented: $showResultView) {
-            if let url = resultUrl, let videoUrl = URL(string: url) {
-                GenerationResultView(videoUrl: videoUrl, onDismiss: {
-                    showResultView = false
-                    resultUrl = nil
-                    promptText = ""
-                })
-                .onAppear {
-                    print("[DEBUG] Показываем GenerationResultView, resultUrl = \(url)")
-                }
+            if let url = resultUrl, let videoUrl = URL(string: url),
+               let item = HistoryViewModel.shared.items.first(where: { $0.resultUrl == url }) {
+                HistoryResultView(videoUrl: videoUrl, historyItem: item)
             } else {
                 Color.clear
                     .onAppear {
-                        print("[DEBUG] Ошибка: resultUrl невалидный")
+                        print("[DEBUG] Ошибка: resultUrl невалидный или не найден элемент истории")
                         showResultView = false
                         showResultUrlError = true
                     }

@@ -69,13 +69,13 @@ struct TokensShopView: View {
                 Spacer()
             }
             HStack {
-                Button(action: { openURL("https://docs.google.com/document/d/1e-xc2g95aJvAMR4RWQd8ES3G6PgtgBdpa7iDM42lhIM/edit?usp=sharing") }) {
+                Button(action: { openURL("https://docs.google.com/document/d/1OTKhILMhMAz3WaosGL6X8Td5y5XJDey3awcrg1BRdzY/edit?usp=sharing") }) {
                     Text("Privacy Policy")
                         .font(.system(size: 13))
                         .foregroundColor(Color.white.opacity(0.3))
                 }
                 Spacer()
-                Button(action: { openURL("https://docs.google.com/document/d/1j5btwXXG8axk-rSJPHWq3GmT-KCxq9lB-PjYJ-IrvBY/edit?usp=sharing") }) {
+                Button(action: { openURL("https://docs.google.com/document/d/1NI5V7ZrVBA4jlZSZTp_iAeC4MTuf85VFtJs5E73LnhI/edit?usp=sharing") }) {
                     Text("Terms of Use")
                         .font(.system(size: 13))
                         .foregroundColor(Color.white.opacity(0.3))

@@ -14,7 +14,7 @@ struct GenerationLoadingView: View {
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
                 
-                LottieView(animation: .named("HiggsfieldApp.json"))
+                LottieView(animation: .named("PixVerse.json"))
                     .playing(loopMode: .autoReverse)
                     .frame(width: 300, height: 300)
                     .padding()

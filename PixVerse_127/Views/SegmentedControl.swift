@@ -14,15 +14,14 @@ struct SegmentedControl: View {
                         }
                     }) {
                         Text(segment)
-                            .font(.custom("SpaceGrotesk-Light_Medium", size: 13))
-                            .foregroundColor(selected == segment ? .black : .white.opacity(0.4))
+                            .font(.system(size: 13))
+                            .foregroundColor(selected == segment ? .white : .white.opacity(0.4))
                             .padding(.horizontal, 20)
                             .padding(.vertical, 8)
-                            .background(selected == segment ? Color.accentColor : Color.white.opacity(0.1))
-                            .cornerRadius(40)
+                            .cornerRadius(8)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 40)
-                                    .stroke(selected == segment ? Color.accentColor : Color.white.opacity(0.24), lineWidth: 1)
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(selected == segment ? Color.white : .white.opacity(0.4), lineWidth: 1)
                             )
                     }
                 }

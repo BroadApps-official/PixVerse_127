@@ -23,7 +23,7 @@ struct ResultHeaderView: View {
                 Spacer()
                 if let title = title {
                     Text(title)
-                        .font(.custom("SpaceGrotesk-Light_Medium", size: 17))
+                        .font(.system(size: 17))
                         .foregroundColor(.white)
                 }
                 Spacer()

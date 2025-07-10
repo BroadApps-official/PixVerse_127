@@ -57,7 +57,7 @@ struct GenerationResultView: View {
                         Spacer()
                         if let effectTitle = effectTitle {
                             Text(effectTitle)
-                                .font(.custom("SpaceGrotesk-Light_Medium", size: 17))
+                                .font(.system(size: 17))
                                 .foregroundColor(.white)
                         }
                         Spacer()
@@ -75,13 +75,6 @@ struct GenerationResultView: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 20)
-                    .background(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color(hex: "#D1FE17"), .black]),
-                            startPoint: .top, endPoint: .bottom
-                        )
-                        .ignoresSafeArea(edges: .top)
-                    )
                 }
                 Spacer()
                 Button(action: {
@@ -95,7 +88,7 @@ struct GenerationResultView: View {
                         Image(systemName: "square.and.arrow.up")
                         Text("Share")
                     }
-                    .font(.custom("SpaceGrotesk-Light_Bold", size: 17))
+                    .font(.system(size: 17))
                     .foregroundColor(.black)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)

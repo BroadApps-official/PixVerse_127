@@ -18,7 +18,7 @@ struct SettingsItemView: View {
                     .frame(width: 24, height: 24)
                 
                 Text(item.title)
-                    .font(.custom("SpaceGrotesk-Light_Medium", size: 17))
+                    .font(.system(size: 17))
                     .foregroundColor(.white)
                 
                 Spacer()

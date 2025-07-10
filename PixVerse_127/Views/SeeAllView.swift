@@ -58,10 +58,12 @@ struct SeeAllView: View {
                     ForEach(viewModel.effectsForSelectedCategory) { effect in
                         NavigationLink(destination: EffectsPageView(effects: viewModel.effectsForSelectedCategory, currentIndex: viewModel.effectsForSelectedCategory.firstIndex(of: effect) ?? 0)) {
                             ZStack(alignment: .bottomLeading) {
-                                TextureVideoViewContainer(urlString: effect.imageUrl, height: 249)
+                                TextureVideoViewContainer(urlString: effect.imageUrl, height: 311)
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width: 175, height: 249)
+                                    .frame(width: 175, height: 311)
                                     .clipped()
+                                    .cornerRadius(8)
+
                                 LinearGradient(
                                     gradient: Gradient(colors: [.clear, .black.opacity(0.8)]),
                                     startPoint: .top,
@@ -69,7 +71,7 @@ struct SeeAllView: View {
                                 )
                                 .frame(height: 60)
                                 Text(effect.title)
-                                    .font(.custom("SpaceGrotesk-Light_Medium", size: 15))
+                                    .font(.system(size: 15))
                                     .foregroundColor(.white)
                                     .padding(.horizontal, 12)
                                     .padding(.bottom, 8)
@@ -107,11 +109,9 @@ struct SeeAllView: View {
 
             Button(action: { showSubscriptionSheet = true }) {
                 if !subscriptionManager.hasSubscription {
-                    Image(systemName: "crown.fill")
-                        .foregroundColor(.black)
-                        .frame(width: 40, height: 40)
-                        .background(Color(hex: "#D1FE17"))
-                        .clipShape(Circle())
+                    CrownCircleButton {
+                        showSubscriptionSheet = true
+                    }
                 }
             }
         }
@@ -121,13 +121,6 @@ struct SeeAllView: View {
         .fullScreenCover(isPresented: $showSubscriptionSheet) {
             SubscriptionSheet(viewModel: SubscriptionViewModel())
         }
-        .background(
-            LinearGradient(
-                gradient: Gradient(colors: [Color(hex: "#D1FE17"), .black]),
-                startPoint: .top, endPoint: .bottom
-            )
-            .ignoresSafeArea(edges: .top)
-        )
     }
 }
 
