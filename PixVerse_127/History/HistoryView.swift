@@ -21,14 +21,14 @@ struct HistoryView: View {
             VStack(spacing: 0) {
                 HStack {
                     Text("History")
-                        .font(.custom("SpaceGrotesk-Light_Bold", size: 34))
+                        .font(.system(size: 34))
                         .kerning(0.4)
                         .foregroundColor(.white)
                     
                     Spacer()
                     
                     if subscriptionManager.hasSubscription {
-                        MCPButton(tokens: manager.availableGenerations, onTap: { showTokensShop = true })
+                        ProButtons(tokens: manager.availableGenerations, onTap: { showTokensShop = true })
                     } else {
                         ProButton(onTap: { showSubscriptionSheet = true })
                     }
@@ -36,13 +36,6 @@ struct HistoryView: View {
                 .padding(.horizontal, 16)
                 .padding(.top, 8)
                 .padding(.bottom, 8)
-                .background(
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color(hex: "#D1FE17"), .black]),
-                        startPoint: .top, endPoint: .bottom
-                    )
-                    .ignoresSafeArea(edges: .top)
-                )
                 .fullScreenCover(isPresented: $showSubscriptionSheet) {
                     SubscriptionSheet(viewModel: SubscriptionViewModel())
                 }
@@ -65,7 +58,6 @@ struct HistoryView: View {
                 ZStack {
                     if filteredItems.isEmpty {
                             HistoryEmptyView(onCreate: {
-                                // TODO: Навигация на генерацию (реализовать по необходимости)
                             })
                     } else {
                         ScrollView {
@@ -91,21 +83,33 @@ struct HistoryView: View {
         viewModel.items.filter { $0.type == (selectedTab == .video ? .video : .photo) }
     }
     
-    private func segmentButton(title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
+    private func segmentButton(
+        title: String,
+        isSelected: Bool,
+        action: @escaping () -> Void
+    ) -> some View {
         Button(action: action) {
-            Text(title)
-                .font(.custom("SpaceGrotesk-Light_Medium", size: 13))
-                .kerning(-0.08)
-                .foregroundColor(isSelected ? .accentColor : .customSecondaryText)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
-                .background(isSelected ? Color.segmentSelectedBackground : Color.segmentUnselectedBackground)
-                .cornerRadius(40)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 40)
-                        .stroke(isSelected ? Color.accentColor : Color.customDivider, lineWidth: 1)
-                )
-                .animation(.easeInOut, value: isSelected)
+            HStack(spacing: 4) {
+                Text(title)
+                    .font(.system(size: 13))
+                    .kerning(-0.08)
+                    .foregroundColor(isSelected ? .white : .customSecondaryText)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 13)
+            .background {
+                if isSelected {
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color(hex: "#7A1DF2"), Color(hex: "#F2315F")]),
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                } else {
+                    Color.segmentUnselectedBackground
+                }
+            }
+            .animation(.easeInOut, value: isSelected)
+            .cornerRadius(12)
         }
     }
 }
@@ -167,7 +171,7 @@ struct HistoryCardView: View {
                             Image(systemName: "arrow.down.to.line")
                             Text("Download")
                         }
-                        .font(.custom("SpaceGrotesk-Light_Bold", size: 15))
+                        .font(.system(size: 15))
                         .foregroundColor(.black)
                         .padding(.vertical, 10)
                         .padding(.horizontal, 20)
@@ -179,7 +183,7 @@ struct HistoryCardView: View {
                             Image(systemName: "square.and.arrow.up")
                             Text("Share")
                         }
-                        .font(.custom("SpaceGrotesk-Light_Bold", size: 15))
+                        .font(.system(size: 15))
                         .foregroundColor(.black)
                         .padding(.vertical, 10)
                         .padding(.horizontal, 20)
@@ -247,7 +251,7 @@ struct HistoryGridItemView: View {
                 }
                 if let title = itemTitle {
                     Text(title)
-                        .font(.custom("SpaceGrotesk-Light_Medium", size: 17))
+                        .font(.system(size: 17))
                         .foregroundColor(.white)
                         .shadow(color: .black.opacity(0.7), radius: 4, x: 0, y: 2)
                         .padding(.horizontal, 12)
@@ -263,7 +267,7 @@ struct HistoryGridItemView: View {
             )
             if let prompt = item.prompt, !prompt.isEmpty {
                 Text("Prompt")
-                    .font(.custom("SpaceGrotesk-Light_Medium", size: 11))
+                    .font(.system(size: 11))
                     .foregroundColor(Color(hex: "D1FE17"))
                     .padding(.horizontal, 10)
                     .padding(.vertical, 4)
@@ -376,18 +380,27 @@ struct HistoryGridItemView: View {
 struct HistoryGridCell: View {
     let item: HistoryItem
     var body: some View {
-        if let url = item.resultUrl, url.hasPrefix("http") {
-            if item.type == .video {
-                NavigationLink(destination: HistoryResultView(videoUrl: URL(string: url)!, historyItem: item)) {
-                    HistoryGridItemView(item: item)
+        Group {
+            if let url = item.resultUrl, url.hasPrefix("http") {
+                if item.type == .video {
+                    NavigationLink(destination: HistoryResultView(videoUrl: URL(string: url)!, historyItem: item)) {
+                        HistoryGridItemView(item: item)
+                    }
+                } else {
+                    NavigationLink(destination: PhotoResultView(resultUrl: url, historyItem: item, onDismiss: {}).navigationBarBackButtonHidden()) {
+                        HistoryGridItemView(item: item)
+                    }
                 }
             } else {
-                NavigationLink(destination: PhotoResultView(resultUrl: url, historyItem: item, onDismiss: {}).navigationBarBackButtonHidden()) {
-                    HistoryGridItemView(item: item)
-                }
+                HistoryGridItemView(item: item)
             }
-        } else {
-            HistoryGridItemView(item: item)
+        }
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            Button(role: .destructive) {
+                HistoryViewModel.shared.remove(item)
+            } label: {
+                Label("Удалить", systemImage: "trash")
+            }
         }
     }
 }

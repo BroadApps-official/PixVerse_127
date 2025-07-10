@@ -30,7 +30,7 @@ struct PhotoEffectDetailView: View {
                 let window = UIApplication.shared.windows.first
                 let topSafeArea = window?.safeAreaInsets.top ?? 0
                 let bottomSafeArea = window?.safeAreaInsets.bottom ?? 0
-                VerticalPager(pageCount: templates.count, currentIndex: $currentIndex) { index in
+                HorizontalPager(pageCount: templates.count, currentIndex: $currentIndex) { index in
                     ZStack {
                         if let url = URL(string: templates[index].preview) {
                             KFImage(url)
@@ -71,7 +71,7 @@ struct PhotoEffectDetailView: View {
                             Spacer()
                             Text("Swipe up and down to see\nmore effects")
                                 .multilineTextAlignment(.center)
-                                .font(.custom("SpaceGrotesk-Light_Medium", size: 20))
+                                .font(.system(size: 20))
                                 .foregroundColor(.white)
                                 .padding(.bottom, 8)
                             LottieView(animation: .named("Swipe.json"))
@@ -141,16 +141,12 @@ struct PhotoEffectDetailView: View {
             }
             Spacer()
             Text(currentTemplate.title ?? "Style")
-                .font(.custom("SpaceGrotesk-Light_Medium", size: 17))
+                .font(.system(size: 17))
                 .foregroundColor(.white)
             Spacer()
             if !subscriptionManager.hasSubscription {
-            Button(action: { showSubscriptionSheet = true }) {
-                Image(systemName: "crown.fill")
-                    .foregroundColor(.black)
-                    .frame(width: 40, height: 40)
-                    .background(Color(hex: "#D1FE17"))
-                    .clipShape(Circle())
+                CrownCircleButton {
+                    showSubscriptionSheet = true
                 }
             }
         }
@@ -170,12 +166,12 @@ struct PhotoEffectDetailView: View {
                 showConfirmation = true
             }
         }) {
-            Text("\(Image(systemName: "sparkles")) Select")
-                .font(.custom("SpaceGrotesk-Light_Bold", size: 17))
+            Text("\(Image(systemName: "sparkles.square.filled.on.square")) Select effect")
+                .font(.system(size: 17))
                 .foregroundColor(.black)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
-                .background(Color.accentColor)
+                .background(.white)
                 .cornerRadius(16)
         }
         .padding(.horizontal, 16).padding(.bottom, 34)
@@ -191,46 +187,62 @@ struct PhotoEffectDetailView: View {
     }
 }
 
-struct VerticalPager<Content: View>: View {
+struct HorizontalPager<Content: View>: View {
     let pageCount: Int
     @Binding var currentIndex: Int
     let content: (Int) -> Content
 
     @GestureState private var dragOffset: CGFloat = 0
+    @State private var isDragging = false
+    @State private var animatingIndex: Int? = nil
+    @State private var animatedDragOffset: CGFloat = 0
 
     var body: some View {
         GeometryReader { geometry in
-            let height = geometry.size.height
-            let peek: CGFloat = 4
-            let cardHeight = height - 2 * peek
-            ZStack {
+            let width = geometry.size.width
+            let spacing: CGFloat = 8
+            let cardWidth = width * 0.85
+            HStack(spacing: spacing) {
                 ForEach(0..<pageCount, id: \.self) { index in
-                    if abs(index - currentIndex) <= 1 {
-                        content(index)
-                            .frame(width: geometry.size.width, height: cardHeight)
-                            .cornerRadius(24)
-                            .clipped()
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .offset(y: CGFloat(index - currentIndex) * height + dragOffset)
-                    }
+                    content(index)
+                        .frame(width: cardWidth, height: geometry.size.height)
+                        .cornerRadius(24)
+                        .clipped()
+                        .scaleEffect(index == currentIndex ? 1.0 : 0.92)
+                        .opacity(abs(index - currentIndex) > 1 ? 0 : 1)
+                        .animation(.interactiveSpring(response: 0.38, dampingFraction: 0.85, blendDuration: 0.25), value: currentIndex)
                 }
             }
-            .animation(.spring(), value: currentIndex)
-            .gesture(
+            .frame(width: width, alignment: .leading)
+            .offset(x: -CGFloat(currentIndex) * (cardWidth + spacing) + (width - cardWidth) / 2 + (isDragging ? dragOffset : animatedDragOffset))
+            .highPriorityGesture(
                 DragGesture()
+                    .onChanged { _ in
+                        if !isDragging { isDragging = true }
+                    }
                     .updating($dragOffset) { value, state, _ in
-                        state = value.translation.height
+                        state = value.translation.width
                     }
                     .onEnded { value in
-                        let threshold = height / 24
+                        let threshold = cardWidth / 4
                         var newIndex = currentIndex
-                        if value.translation.height < -threshold {
+                        if value.translation.width < -threshold {
                             newIndex = min(currentIndex + 1, pageCount - 1)
-                        } else if value.translation.height > threshold {
+                        } else if value.translation.width > threshold {
                             newIndex = max(currentIndex - 1, 0)
                         }
-                        withAnimation(.spring()) {
-                            currentIndex = newIndex
+                        isDragging = false
+                        if newIndex == currentIndex {
+                            // Плавно возвращаем dragOffset к нулю
+                            animatedDragOffset = value.translation.width
+                            withAnimation(.interactiveSpring(response: 0.38, dampingFraction: 0.85, blendDuration: 0.25)) {
+                                animatedDragOffset = 0
+                            }
+                        } else {
+                            animatedDragOffset = 0
+                            withAnimation(.interactiveSpring(response: 0.38, dampingFraction: 0.85, blendDuration: 0.25)) {
+                                currentIndex = newIndex
+                            }
                         }
                     }
             )
@@ -271,6 +283,28 @@ fileprivate struct PhotoResultView2: View {
                     .clipShape(Circle())
             }
             .padding()
+        }
+    }
+}
+
+struct CrownCircleButton: View {
+    var action: () -> Void
+    var body: some View {
+        Button(action: action) {
+            ZStack {
+                LinearGradient(
+                    gradient: Gradient(colors: [Color(hex: "#7A1DF2"), Color(hex: "#F2315F")]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                Image(systemName: "crown.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(.white)
+            }
+            .frame(width: 44, height: 44)
         }
     }
 } 

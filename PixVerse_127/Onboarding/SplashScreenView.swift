@@ -1,10 +1,3 @@
-//
-//  SplashScreenView.swift
-//  Higgsfield
-//
-//  Created by Денис Николаев on 24.06.2025.
-//
-
 import SwiftUI
 
 struct SplashScreenView: View {

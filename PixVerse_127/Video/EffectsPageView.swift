@@ -20,20 +20,20 @@ struct EffectsPageView: View {
         ZStack {
             Color.black.ignoresSafeArea()
             GeometryReader { geometry in
-                let height = geometry.size.height
-                let peek: CGFloat = 4
-                let cardHeight = height - 2 * peek
-                VerticalPager(pageCount: viewModel.effects.count, currentIndex: $viewModel.currentIndex) { index in
+                let width = geometry.size.width
+                let peek: CGFloat = 32
+                let cardWidth = width - 2 * peek
+                HorizontalPager(pageCount: viewModel.effects.count, currentIndex: $viewModel.currentIndex) { index in
                     ZStack {
-                        TextureVideoViewContainer(urlString: viewModel.effects[index].imageUrl, height: cardHeight)
+                        TextureVideoViewContainer(urlString: viewModel.effects[index].imageUrl, height: geometry.size.height)
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: geometry.size.width, height: cardHeight)
+                            .frame(width: cardWidth, height: geometry.size.height)
                             .clipped()
                     }
                     .cornerRadius(24)
                     .clipped()
-                    .frame(width: geometry.size.width, height: cardHeight)
-                    .frame(maxWidth: .infinity, alignment: .center)
+                    .frame(width: cardWidth, height: geometry.size.height)
+                    .frame(maxHeight: .infinity, alignment: .center)
                 }
             }
             VStack {
@@ -49,16 +49,12 @@ struct EffectsPageView: View {
                     }
                     Spacer()
                     Text(viewModel.currentEffect.title)
-                        .font(.custom("SpaceGrotesk-Light_Medium", size: 17))
+                        .font(.system(size: 17))
                         .foregroundColor(.white)
                     Spacer()
                     if !subscriptionManager.hasSubscription {
-                        Button(action: { showSubscriptionSheet = true }) {
-                            Image(systemName: "crown.fill")
-                                .foregroundColor(.black)
-                                .frame(width: 40, height: 40)
-                                .background(Color(hex: "#D1FE17"))
-                                .clipShape(Circle())
+                        CrownCircleButton {
+                            showSubscriptionSheet = true
                         }
                     }
                 }
@@ -112,12 +108,12 @@ struct EffectsPageView: View {
                 showConfirmation = true
             }
         }) {
-            Text("\(Image(systemName: "sparkles")) Select")
-                .font(.custom("SpaceGrotesk-Light_Bold", size: 17))
+            Text("\(Image(systemName: "sparkles.square.filled.on.square")) Select effect")
+                .font(.system(size: 17))
                 .foregroundColor(.black)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
-                .background(Color.accentColor)
+                .background(.white)
                 .cornerRadius(16)
         }
         .padding(.horizontal, 16).padding(.bottom, 34)

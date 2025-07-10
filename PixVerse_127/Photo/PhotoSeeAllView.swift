@@ -97,11 +97,9 @@ struct PhotoSeeAllView: View {
             Button(action: {
                 showSubscriptionSheet = true
             }) {
-                Image(systemName: "crown.fill")
-                    .foregroundColor(.black)
-                    .frame(width: 40, height: 40)
-                    .background(Color(hex: "#D1FE17"))
-                    .clipShape(Circle())
+                CrownCircleButton {
+                    showSubscriptionSheet = true
+                }
             }
         }
         .padding(.horizontal)
@@ -110,12 +108,5 @@ struct PhotoSeeAllView: View {
         .fullScreenCover(isPresented: $showSubscriptionSheet) {
             SubscriptionSheet(viewModel: SubscriptionViewModel())
         }
-        .background(
-            LinearGradient(
-                gradient: Gradient(colors: [Color(hex: "#D1FE17"), .black]),
-                startPoint: .top, endPoint: .bottom
-            )
-            .ignoresSafeArea(edges: .top)
-        )
     }
 } 

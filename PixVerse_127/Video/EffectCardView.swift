@@ -17,7 +17,7 @@ struct EffectCardView: View {
                 )
                 .frame(height: 60)
                 Text(effect.title)
-                    .font(.custom("SpaceGrotesk-Light_Medium", size: 15))
+                    .font(.system(size: 15))
                     .foregroundColor(.white)
                     .padding(.horizontal, 12)
                     .padding(.bottom, 8)

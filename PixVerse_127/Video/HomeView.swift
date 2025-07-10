@@ -8,25 +8,17 @@ struct HomeView: View {
     @ObservedObject private var subscriptionManager = SubscriptionManager.shared
     @ObservedObject private var manager = Manager.shared
     
-    private let trendEffects: [Effect] = [
-        Effect(id: "trend", title: "Trend effect", imageUrl: "trend1", category: EffectCategory(rawValue: "Popular") ?? .unknown, isPro: true),
-        Effect(id: "trend2", title: "Trend effect", imageUrl: "trend2", category: EffectCategory(rawValue: "Popular") ?? .unknown, isPro: true),
-        Effect(id: "trend3", title: "Trend effect", imageUrl: "trend3", category: EffectCategory(rawValue: "Popular") ?? .unknown, isPro: true)
-    ]
-    
     var body: some View {
-      //  NavigationView {
             ZStack {
                 Color.black.ignoresSafeArea()
                 VStack(spacing: 0) {
                     HStack {
-                        Text("Pixune")
-                            .font(.custom("SpaceGrotesk-Light_Bold", size: 34))
-                            .kerning(0.4)
+                        Text("AI Video")
+                            .font(.system(size: 34))
                             .foregroundColor(.white)
                         Spacer()
                         if subscriptionManager.hasSubscription {
-                            MCPButton(tokens: manager.availableGenerations, onTap: { showTokensShop = true })
+                            ProButtons(tokens: manager.availableGenerations, onTap: { showTokensShop = true })
                         } else {
                             ProButton(onTap: { showSubscriptionSheet = true })
                         }
@@ -34,13 +26,6 @@ struct HomeView: View {
                     .padding(.horizontal, 16)
                     .padding(.top, 8)
                     .padding(.bottom, 8)
-                    .background(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color(hex: "#D1FE17"), .black]),
-                            startPoint: .top, endPoint: .bottom
-                        )
-                        .ignoresSafeArea(edges: .top)
-                    )
                     .fullScreenCover(isPresented: $showSubscriptionSheet) {
                         SubscriptionSheet(viewModel: SubscriptionViewModel())
                     }
@@ -53,8 +38,6 @@ struct HomeView: View {
                     ScrollView {
                         if selectedTab == .effects {
                             VStack(spacing: 20) {
-                                EffectBannerView(effects: trendEffects)
-                                
                                 if viewModel.isLoading {
                                     ForEach(0..<2, id: \.self) { _ in
                                         VStack(alignment: .leading, spacing: 12) {
@@ -88,6 +71,7 @@ struct HomeView: View {
                                         }
                                     }
                                     .padding(.horizontal, 16)
+                                    .padding(.top, 24)
                                 }
                             }
                         } else {
@@ -95,7 +79,6 @@ struct HomeView: View {
                         }
                     }
                 }
-            //}
             .navigationBarHidden(true)
         }
         .onAppear {
