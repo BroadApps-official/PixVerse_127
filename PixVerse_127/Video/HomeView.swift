@@ -32,6 +32,9 @@ struct HomeView: View {
                     .fullScreenCover(isPresented: $showTokensShop) {
                         TokensShopView()
                     }
+                    .onChange(of: subscriptionManager.hasSubscription) { hasSub in
+                        if hasSub { showSubscriptionSheet = false }
+                    }
                     SegmentedMenuView(selectedTab: $selectedTab)
                         .padding(.top, 16)
                     

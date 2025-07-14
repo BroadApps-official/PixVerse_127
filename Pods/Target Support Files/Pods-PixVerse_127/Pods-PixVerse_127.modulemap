@@ -1,0 +1,6 @@
+framework module Pods_PixVerse_127 {
+  umbrella header "Pods-PixVerse_127-umbrella.h"
+
+  export *
+  module * { export * }
+}

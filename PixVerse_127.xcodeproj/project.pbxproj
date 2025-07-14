@@ -7,10 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9D5603ACE98F1CF90B7A38A0 /* Pods_PixVerse_127.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAE284F700899EED2898E8E5 /* Pods_PixVerse_127.framework */; };
 		E62091512E13F7F000D0E8A1 /* Store.storekit in Sources */ = {isa = PBXBuildFile; fileRef = E62091502E13F7F000D0E8A1 /* Store.storekit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B0B9AF6C9E9D97A80C7B818F /* Pods-PixVerse_127.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PixVerse_127.debug.xcconfig"; path = "Target Support Files/Pods-PixVerse_127/Pods-PixVerse_127.debug.xcconfig"; sourceTree = "<group>"; };
+		CAE284F700899EED2898E8E5 /* Pods_PixVerse_127.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PixVerse_127.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA8A48FFA2150B65F47A6B88 /* Pods-PixVerse_127.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PixVerse_127.release.xcconfig"; path = "Target Support Files/Pods-PixVerse_127/Pods-PixVerse_127.release.xcconfig"; sourceTree = "<group>"; };
 		E62091502E13F7F000D0E8A1 /* Store.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Store.storekit; sourceTree = "<group>"; };
 		E6C1AB562E127C1E00C6FEA7 /* PixVerse_127.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PixVerse_127.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -18,6 +22,8 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E6C1AB582E127C1E00C6FEA7 /* PixVerse_127 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = PixVerse_127;
 			sourceTree = "<group>";
 		};
@@ -28,6 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D5603ACE98F1CF90B7A38A0 /* Pods_PixVerse_127.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -37,8 +44,18 @@
 		403DA61964EB50429B860A3B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				B0B9AF6C9E9D97A80C7B818F /* Pods-PixVerse_127.debug.xcconfig */,
+				DA8A48FFA2150B65F47A6B88 /* Pods-PixVerse_127.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		4709D737FD6CABAA84C48A73 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CAE284F700899EED2898E8E5 /* Pods_PixVerse_127.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		E6C1AB4D2E127C1E00C6FEA7 = {
@@ -48,6 +65,7 @@
 				E6C1AB582E127C1E00C6FEA7 /* PixVerse_127 */,
 				E6C1AB572E127C1E00C6FEA7 /* Products */,
 				403DA61964EB50429B860A3B /* Pods */,
+				4709D737FD6CABAA84C48A73 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -66,9 +84,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E6C1AB642E127C2000C6FEA7 /* Build configuration list for PBXNativeTarget "PixVerse_127" */;
 			buildPhases = (
+				01F8FF687AA4A1C1D331767D /* [CP] Check Pods Manifest.lock */,
 				E6C1AB522E127C1E00C6FEA7 /* Sources */,
 				E6C1AB532E127C1E00C6FEA7 /* Frameworks */,
 				E6C1AB542E127C1E00C6FEA7 /* Resources */,
+				1BF8215656F67A1109FD50EE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -125,6 +145,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		01F8FF687AA4A1C1D331767D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PixVerse_127-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1BF8215656F67A1109FD50EE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PixVerse_127/Pods-PixVerse_127-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PixVerse_127/Pods-PixVerse_127-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PixVerse_127/Pods-PixVerse_127-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E6C1AB522E127C1E00C6FEA7 /* Sources */ = {
@@ -259,6 +321,7 @@
 		};
 		E6C1AB652E127C2000C6FEA7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B0B9AF6C9E9D97A80C7B818F /* Pods-PixVerse_127.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -269,6 +332,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Effect - Room Video Ai Effect";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We don’t store user information, especially not on our server. We need camera access to let you take photos and upload them to our server for creating videos with special effects.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We save edited photos to your photo library for easy access.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We save edited photos to your photo library for easy access.";
@@ -298,6 +362,7 @@
 		};
 		E6C1AB662E127C2000C6FEA7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DA8A48FFA2150B65F47A6B88 /* Pods-PixVerse_127.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -308,6 +373,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Effect - Room Video Ai Effect";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We don’t store user information, especially not on our server. We need camera access to let you take photos and upload them to our server for creating videos with special effects.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We save edited photos to your photo library for easy access.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We save edited photos to your photo library for easy access.";

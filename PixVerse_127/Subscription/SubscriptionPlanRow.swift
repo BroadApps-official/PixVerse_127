@@ -10,36 +10,64 @@ struct SubscriptionPlanRow: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             HStack(spacing: 12) {
+                // Радио-кнопка
                 ZStack {
-                    Image(systemName: icon)
-                        .font(.system(size: 17, weight: .regular))
-                        .foregroundColor(isSelected ? Color(hex: "#9D3AE9") : Color.white.opacity(0.4))
-                        .animation(.easeInOut(duration: 0.2), value: isSelected)
+                    Circle()
+                        .stroke(isSelected ? Color.white : Color.white.opacity(0.3), lineWidth: 2)
+                        .frame(width: 22, height: 22)
+                    if isSelected {
+                        Circle()
+                            .fill(Color.white)
+                            .frame(width: 12, height: 12)
+                    }
                 }
+                // Иконка (можно скрыть, если не нужна)
+                // Image(systemName: icon)
+                //     .font(.system(size: 17, weight: .regular))
+                //     .foregroundColor(isSelected ? Color.white : Color.white.opacity(0.6))
+                //     .animation(.easeInOut(duration: 0.2), value: isSelected)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
-                        .font(isSelected ? .system(size: 17, weight: .semibold) : .system(size: 17, weight: .regular))
-                        .foregroundColor(.white)
+                        .font(.system(size: 17, weight: isSelected ? .semibold : .regular))
+                        .foregroundColor(isSelected ? .white : Color.white.opacity(0.8))
                     Text(subtitle)
                         .font(.system(size: 12))
-                        .foregroundColor(isSelected ? Color.white.opacity(0.8) : Color.white.opacity(0.4))
+                        .foregroundColor(isSelected ? Color.white.opacity(0.8) : Color.white.opacity(0.5))
                 }
                 Spacer()
             }
-            .padding(.vertical, 14)
+            .padding(.vertical, 16)
             .padding(.leading, 12)
             .padding(.trailing, badge != nil && isSelected ? 60 : 28)
             .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(isSelected ? Color(hex: "#232325") : Color(hex: "#1D1D1F"))
+                Group {
+                    if isSelected {
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color(hex: "#7A1DF2"), Color(hex: "#F2315F")]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    } else {
+                        Color(hex: "#232325")
+                    }
+                }
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 14)
-//                    .stroke(isSelected ? LinearGradient(
-//                        gradient: Gradient(colors: [Color(hex: "#7A1DF2"), Color(hex: "#F2315F")]),
-//                        startPoint: .leading,
-//                        endPoint: .trailing
-//                    ) : Color.clear, lineWidth: 2)
+                    .stroke(
+                        isSelected ?
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.white.opacity(0.7), Color.white.opacity(0.3)]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ) :
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.clear, Color.clear]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        lineWidth: 2
+                    )
             )
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .animation(.easeInOut(duration: 0.2), value: isSelected)

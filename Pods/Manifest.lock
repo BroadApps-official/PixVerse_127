@@ -1,0 +1,68 @@
+PODS:
+  - ApphudSDK (3.6.0)
+  - Kingfisher (8.1.0)
+  - lottie-ios (4.5.1)
+  - PINCache (3.0.4):
+    - PINCache/Arc-exception-safe (= 3.0.4)
+    - PINCache/Core (= 3.0.4)
+  - PINCache/Arc-exception-safe (3.0.4):
+    - PINCache/Core
+  - PINCache/Core (3.0.4):
+    - PINOperation (~> 1.2.3)
+  - PINOperation (1.2.3)
+  - PINRemoteImage/Core (3.0.4):
+    - PINOperation
+  - PINRemoteImage/iOS (3.0.4):
+    - PINRemoteImage/Core
+  - PINRemoteImage/PINCache (3.0.4):
+    - PINCache (~> 3.0.4)
+    - PINRemoteImage/Core
+  - Texture (3.2.0):
+    - Texture/AssetsLibrary (= 3.2.0)
+    - Texture/Core (= 3.2.0)
+    - Texture/MapKit (= 3.2.0)
+    - Texture/Photos (= 3.2.0)
+    - Texture/PINRemoteImage (= 3.2.0)
+    - Texture/Video (= 3.2.0)
+  - Texture/AssetsLibrary (3.2.0):
+    - Texture/Core
+  - Texture/Core (3.2.0)
+  - Texture/MapKit (3.2.0):
+    - Texture/Core
+  - Texture/Photos (3.2.0):
+    - Texture/Core
+  - Texture/PINRemoteImage (3.2.0):
+    - PINRemoteImage/iOS (~> 3.0.0)
+    - PINRemoteImage/PINCache
+    - Texture/Core
+  - Texture/Video (3.2.0):
+    - Texture/Core
+
+DEPENDENCIES:
+  - ApphudSDK
+  - Kingfisher
+  - lottie-ios
+  - Texture
+
+SPEC REPOS:
+  trunk:
+    - ApphudSDK
+    - Kingfisher
+    - lottie-ios
+    - PINCache
+    - PINOperation
+    - PINRemoteImage
+    - Texture
+
+SPEC CHECKSUMS:
+  ApphudSDK: c921b8009755fc3b576956b6db4c19c174cf7a4a
+  Kingfisher: dfbf20b6249ed4ef6f18d6a96c847bce860bdb95
+  lottie-ios: 248b380fa1b97d18e792c37d90da7ab2aa0d6562
+  PINCache: d9a87a0ff397acffe9e2f0db972ac14680441158
+  PINOperation: fb563bcc9c32c26d6c78aaff967d405aa2ee74a7
+  PINRemoteImage: 6256a644f4996991f124811763c7286b2a63ff94
+  Texture: 61e86ea2ee124f545be40293b54b5b8986006da2
+
+PODFILE CHECKSUM: 6f5da694289000960452702076f4b030a06501d3
+
+COCOAPODS: 1.16.2
