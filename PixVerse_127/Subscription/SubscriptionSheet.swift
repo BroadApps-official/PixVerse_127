@@ -70,7 +70,7 @@ struct SubscriptionSheet: View {
                 }
                 
                 VStack(alignment: .leading, spacing: geometry.size.height * 0.015) {
-                    ForEach(["Access to all effects", "Unlimited generation", "Access to all functions"], id: \.self) { key in
+                    ForEach(["Access to all effects", "Access to all functions"], id: \.self) { key in
                         HStack {
                             Image(systemName: "sparkles")
                                 .foregroundColor(.white)
@@ -95,13 +95,14 @@ struct SubscriptionSheet: View {
                         print("⚠️ No subscription plans visible")
                     }
             } else {
-                ForEach(viewModel.subscriptionPlans) { plan in
+                ForEach(Array(viewModel.subscriptionPlans.enumerated()), id: \ .element.id) { index, plan in
                     SubscriptionPlanRow(
                         icon: plan.period.lowercased().contains("year") ? "checkmark.circle.fill" : "checkmark.circle.fill",
                         title: "Just " + plan.price + (plan.period.lowercased().contains("year") ? " / Year" : " / Week"),
                         subtitle: "Auto renewable. Cancel anytime.",
                         badge: plan.discountPercentage != nil ? "SAVE \(plan.discountPercentage!)%" : nil,
-                        isSelected: plan.isSelected
+                        isSelected: plan.isSelected,
+                        generationLabel: index == 0 ? "100 generation" : (index == 1 ? "10 generation" : nil)
                     )
                     .onTapGesture {
                         impactFeedback.impactOccurred()

@@ -6,11 +6,11 @@ struct SubscriptionPlanRow: View {
     let subtitle: String
     let badge: String?
     let isSelected: Bool
+    let generationLabel: String?
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
             HStack(spacing: 12) {
-                // Радио-кнопка
                 ZStack {
                     Circle()
                         .stroke(isSelected ? Color.white : Color.white.opacity(0.3), lineWidth: 2)
@@ -30,6 +30,11 @@ struct SubscriptionPlanRow: View {
                     Text(title)
                         .font(.system(size: 17, weight: isSelected ? .semibold : .regular))
                         .foregroundColor(isSelected ? .white : Color.white.opacity(0.8))
+                    if let generationLabel = generationLabel {
+                        Text(generationLabel)
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(isSelected ? .white : Color.white.opacity(0.7))
+                    }
                     Text(subtitle)
                         .font(.system(size: 12))
                         .foregroundColor(isSelected ? Color.white.opacity(0.8) : Color.white.opacity(0.5))
