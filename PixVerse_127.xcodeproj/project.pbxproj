@@ -22,8 +22,6 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E6C1AB582E127C1E00C6FEA7 /* PixVerse_127 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = PixVerse_127;
 			sourceTree = "<group>";
 		};
@@ -332,7 +330,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Effect - Room Video Ai Effect";
+				INFOPLIST_KEY_CFBundleDisplayName = Kreai;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We don’t store user information, especially not on our server. We need camera access to let you take photos and upload them to our server for creating videos with special effects.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We save edited photos to your photo library for easy access.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We save edited photos to your photo library for easy access.";
@@ -347,7 +345,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ham.411e6t;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -373,7 +371,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Effect - Room Video Ai Effect";
+				INFOPLIST_KEY_CFBundleDisplayName = Kreai;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We don’t store user information, especially not on our server. We need camera access to let you take photos and upload them to our server for creating videos with special effects.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We save edited photos to your photo library for easy access.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We save edited photos to your photo library for easy access.";
@@ -388,7 +386,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ham.411e6t;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
