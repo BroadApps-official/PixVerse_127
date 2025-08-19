@@ -4,13 +4,13 @@ import UIKit
 class APIService {
     static let shared = APIService()
     let manager = Manager.shared
-    private let baseURL = "https://vewapnew.online/api"
-    
-    func fetchTemplatesByCategories(appName: String? = nil, ai: [String]? = nil, isNew: Bool? = nil, completion: @escaping (Result<[EffectCategoryResponse], Error>) -> Void) {
+    private let baseURL = "https://vewapnew.online/api/v2"
+
+    func fetchTemplatesByCategories(bundleId: String? = nil, ai: [String]? = nil, isNew: Bool? = nil, completion: @escaping (Result<[EffectCategoryResponse], Error>) -> Void) {
         var urlComponents = URLComponents(string: "\(baseURL)/templatesByCategories")!
         var queryItems: [URLQueryItem] = []
-        if let appName = appName {
-            queryItems.append(URLQueryItem(name: "appName", value: "com.tet.P1x2n4"))
+        if let bundleId = bundleId {
+            queryItems.append(URLQueryItem(name: "bundleId", value: "com.ham.411e6t"))
         }
         if let ai = ai {
             for (index, value) in ai.enumerated() {
@@ -60,9 +60,9 @@ class APIService {
         }.resume()
     }
 
-    func generate(templateId: String, image: UIImage, userId: String, appId: String, completion: @escaping (Result<String, Error>) -> Void) {
-        print("[APIService] generate: templateId=\(templateId), userId=\("F452345B-BEEC-43EA-AF96-000000000"), appId=\(appId)")
-        let url = URL(string: "https://vewapnew.online/api/generate")!
+    func generate(templateId: String, image: UIImage, userId: String, bundleId: String, completion: @escaping (Result<String, Error>) -> Void) {
+        print("[APIService] generate: templateId=\(templateId), userId=\("F452345B-BEEC-43EA-AF96-000000000"), bundleId=\(bundleId)")
+        let url = URL(string: "https://vewapnew.online/api/v2/generate")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         let boundary = UUID().uuidString
@@ -80,8 +80,8 @@ class APIService {
         
         appendFormField("templateId", value: templateId)
         appendFormField("userId", value: manager.userId)
-        appendFormField("appId", value: "com.tet.P1x2n4")
-        
+        appendFormField("bundleId", value: "com.ham.411e6t")
+
         body.append("--\(boundary)\r\n".data(using: .utf8)!)
         body.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!)
         body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
@@ -123,7 +123,8 @@ class APIService {
 
     func getGenerationStatus(generationId: String, completion: @escaping (Result<GenerationStatusResponse, Error>) -> Void) {
         print("[APIService] getGenerationStatus: generationId=\(generationId)")
-        guard let url = URL(string: "https://vewapnew.online/api/generationStatus?generationId=\(generationId)") else {
+        let bundleId = Bundle.main.bundleIdentifier ?? "com.ham.411e6t"
+        guard let url = URL(string: "https://vewapnew.online/api/v2/generationStatus?generationId=\(generationId)&bundleId=\(bundleId)") else {
             completion(.failure(NSError(domain: "Invalid URL", code: -1)))
             return
         }
@@ -188,26 +189,156 @@ class APIService {
             }
         }.resume()
     }
-} 
+
+    // MARK: - Login
+    func login(userId: String, gender: String, source: String = "com.ham.411e6t", completion: @escaping (Result<Void, Error>) -> Void) {
+        let url = URL(string: "https://nextgenwebapps.shop/api/v1/user/login")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("Bearer f113066f-2ad6-43eb-b860-8683fde1042a", forHTTPHeaderField: "Authorization")
+        let boundary = UUID().uuidString
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        var body = Data()
+        func appendFormField(_ name: String, value: String) {
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8)!)
+            body.append("\(value)\r\n".data(using: .utf8)!)
+        }
+        appendFormField("userId", value: userId)
+        appendFormField("gender", value: gender)
+        appendFormField("source", value: source)
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        request.httpBody = body
+        
+        print("[APIService][login] URL: \(url)")
+        print("[APIService][login] Headers: \(request.allHTTPHeaderFields ?? [:])")
+        print("[APIService][login] Params: userId=\(userId), gender=\(gender), source=\(source)")
+        print("[APIService][login] Body size: \(body.count) bytes")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("[APIService][login] Error: \(error.localizedDescription)")
+                completion(.failure(error))
+                return
+            }
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("[APIService][login] No HTTP response")
+                completion(.failure(NSError(domain: "No response", code: 0)))
+                return
+            }
+            print("[APIService][login] Status: \(httpResponse.statusCode)")
+            if let data = data, let str = String(data: data, encoding: .utf8) {
+                print("[APIService][login] Response: \(str)")
+            }
+            guard (200...299).contains(httpResponse.statusCode) else {
+                completion(.failure(NSError(domain: "HTTP", code: httpResponse.statusCode)))
+                return
+            }
+            completion(.success(()))
+        }.resume()
+    }
+}
  
 
 class GenerationManager {
     static let shared = GenerationManager()
+    let manager = Manager.shared
     private init() {}
     
-    private let baseURL = URL(string: "https://vewapnew.online/api")!
+    private let baseURL = URL(string: "https://vewapnew.online/api/v2")!
     
-    func generateImg2Video(prompt: String, image: UIImage, completion: @escaping (Result<String, Error>) -> Void) {
-        guard
-              let appId = Bundle.main.bundleIdentifier else {
-            print("[GenerationManager] Ошибка: нет userId/appId")
-            completion(.failure(NSError(domain: "App", code: 0, userInfo: [NSLocalizedDescriptionKey: "No userId/appId"])))
+    func generateTxt2Video(prompt: String, resolution: VideoResolution = .p720, completion: @escaping (Result<String, Error>) -> Void) {
+        let userId = manager.userId
+        guard !userId.isEmpty, let bundleId = Bundle.main.bundleIdentifier else {
+            print("[GenerationManager] Ошибка: нет userId/bundleId")
+            completion(.failure(NSError(domain: "App", code: 0, userInfo: [NSLocalizedDescriptionKey: "No userId/bundleId"])))
             return
         }
         
-        let userId = Manager.shared.userId
-       
-        let url = baseURL.appendingPathComponent("generate/img2video")
+        // Выбираем URL в зависимости от разрешения
+        let endpoint = resolution == .p1080 ? "generate/txt2videoExt" : "generate/txt2video"
+        let url = baseURL.appendingPathComponent(endpoint)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        let boundary = UUID().uuidString
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer rE176kzVVqjtWeGToppo4lRcbz3HRLoBrZREEvgQ8fKdWuxySCw6tv52BdLKBkZTOHWda5ISwLUVTyRoZEF0A33Xpk63lF9wTCtDxOs8XK3YArAiqIXVb7ZS4IK61TYPQMu5WqzFWwXtZc1jo8w", forHTTPHeaderField: "Authorization")
+        
+        var body = Data()
+        
+        // promptText
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"promptText\"\r\n\r\n".data(using: .utf8)!)
+        body.append(prompt.data(using: .utf8) ?? Data())
+        body.append("\r\n".data(using: .utf8)!)
+        
+        // userId
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"userId\"\r\n\r\n".data(using: .utf8)!)
+        body.append(userId.data(using: .utf8) ?? Data())
+        body.append("\r\n".data(using: .utf8)!)
+        
+        // appId
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"bundleId\"\r\n\r\n".data(using: .utf8)!)
+        body.append(bundleId.data(using: .utf8) ?? Data())
+        body.append("\r\n".data(using: .utf8)!)
+        
+        // end
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        request.httpBody = body
+        
+        print("[GenerationManager] POST \(url) with resolution: \(resolution.displayName)")
+        print("Headers: \(request.allHTTPHeaderFields ?? [:])")
+        print("multipart body: [promptText: \(prompt), userId: \(userId), bundleId: \(bundleId)]")
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("[GenerationManager] Ошибка запроса: \(error)"); completion(.failure(error)); return
+            }
+            if let httpResponse = response as? HTTPURLResponse {
+                print("[GenerationManager] Status code: \(httpResponse.statusCode)")
+            }
+            guard let data = data else {
+                print("[GenerationManager] Нет данных в ответе")
+                completion(.failure(NSError(domain: "App", code: 0, userInfo: [NSLocalizedDescriptionKey: "No data"])));
+                return
+            }
+            if let str = String(data: data, encoding: .utf8) {
+                print("[GenerationManager] Ответ: \(str)")
+            }
+            do {
+                let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+                let genId = ((json?["data"] as? [String: Any])?["generationId"] as? String)
+                if let genId = genId {
+                    print("[GenerationManager] generationId: \(genId)")
+                    completion(.success(genId))
+                } else {
+                    let msg = (json?["messages"] as? [String])?.joined(separator: ", ") ?? "Unknown error"
+                    print("[GenerationManager] Ошибка генерации: \(msg)")
+                    completion(.failure(NSError(domain: "App", code: 0, userInfo: [NSLocalizedDescriptionKey: msg])))
+                }
+            } catch {
+                print("[GenerationManager] Ошибка парсинга JSON: \(error)")
+                completion(.failure(error))
+            }
+        }
+        task.resume()
+    }
+    
+    func generateImg2Video(prompt: String, image: UIImage, resolution: VideoResolution = .p720, completion: @escaping (Result<String, Error>) -> Void) {
+        let userId = manager.userId
+        guard !userId.isEmpty, let bundleId = Bundle.main.bundleIdentifier else {
+            print("[GenerationManager] Ошибка: нет userId/bundleId")
+            completion(.failure(NSError(domain: "App", code: 0, userInfo: [NSLocalizedDescriptionKey: "No userId/bundleId"])))
+            return
+        }
+        // Выбираем URL в зависимости от разрешения
+        let endpoint = resolution == .p1080 ? "generate/img2videoExt" : "generate/img2video"
+        let url = baseURL.appendingPathComponent(endpoint)
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         let boundary = UUID().uuidString
@@ -233,19 +364,18 @@ class GenerationManager {
         body.append("\r\n".data(using: .utf8)!)
         // appId
         body.append("--\(boundary)\r\n".data(using: .utf8)!)
-        body.append("Content-Disposition: form-data; name=\"appId\"\r\n\r\n".data(using: .utf8)!)
-        body.append(appId.data(using: .utf8) ?? Data())
+        body.append("Content-Disposition: form-data; name=\"bundleId\"\r\n\r\n".data(using: .utf8)!)
+        body.append(bundleId.data(using: .utf8) ?? Data())
         body.append("\r\n".data(using: .utf8)!)
         // end
         body.append("--\(boundary)--\r\n".data(using: .utf8)!)
         request.httpBody = body
-        print("[GenerationManager] POST \(url)")
+        print("[GenerationManager] POST \(url) with resolution: \(resolution.displayName)")
         print("Headers: \(request.allHTTPHeaderFields ?? [:])")
-        print("multipart body: [image: \(imageData.count) bytes, promptText: \(prompt), userId: \(userId), appId: \(appId)]")
+        print("multipart body: [image: \(imageData.count) bytes, promptText: \(prompt), userId: \(userId), bundleId: \(bundleId)]")
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("[GenerationManager] Ошибка запроса: \(error)")
-                completion(.failure(error)); return
+                print("[GenerationManager] Ошибка запроса: \(error)"); completion(.failure(error)); return
             }
             if let httpResponse = response as? HTTPURLResponse {
                 print("[GenerationManager] Status code: \(httpResponse.statusCode)")
@@ -279,7 +409,11 @@ class GenerationManager {
     
     private func pollGenerationStatus(generationId: String, completion: @escaping (Result<String, Error>) -> Void) {
         var components = URLComponents(url: baseURL.appendingPathComponent("generationStatus"), resolvingAgainstBaseURL: false)
-        components?.queryItems = [URLQueryItem(name: "generationId", value: generationId)]
+        let bundleId = Bundle.main.bundleIdentifier ?? "com.ham.411e6t"
+        components?.queryItems = [
+            URLQueryItem(name: "generationId", value: generationId),
+            URLQueryItem(name: "bundleId", value: bundleId)
+        ]
         
         guard let url = components?.url else {
             print("[GenerationManager] Ошибка формирования URL статуса")
@@ -332,11 +466,16 @@ class GenerationManager {
     
     func getGenerationStatus(generationId: String, completion: @escaping (Result<GenerationStatusResponse, Error>) -> Void) {
         var components = URLComponents(url: baseURL.appendingPathComponent("generationStatus"), resolvingAgainstBaseURL: false)
-        components?.queryItems = [URLQueryItem(name: "generationId", value: generationId)]
+        let bundleId = Bundle.main.bundleIdentifier ?? "com.ham.411e6t"
+        components?.queryItems = [
+            URLQueryItem(name: "generationId", value: generationId),
+            URLQueryItem(name: "bundleId", value: bundleId)
+        ]
         guard let url = components?.url else {
             completion(.failure(NSError(domain: "App", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid status URL"])))
             return
         }
+        print("[GenerationManager] GET \(url)")
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("Bearer rE176kzVVqjtWeGToppo4lRcbz3HRLoBrZREEvgQ8fKdWuxySCw6tv52BdLKBkZTOHWda5ISwLUVTyRoZEF0A33Xpk63lF9wTCtDxOs8XK3YArAiqIXVb7ZS4IK61TYPQMu5WqzFWwXtZc1jo8w", forHTTPHeaderField: "Authorization")
@@ -415,3 +554,4 @@ struct GenerationStatusResponse: Decodable {
     let messages: [String]
     let data: DataObj?
 }
+

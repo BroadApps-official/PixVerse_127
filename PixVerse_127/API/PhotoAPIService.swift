@@ -66,7 +66,7 @@ final class PhotoAPIService {
         let boundary = UUID().uuidString
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        let appId = Bundle.main.bundleIdentifier ?? "com.tet.P1x2n4"
+        let appId = Bundle.main.bundleIdentifier ?? "com.ham.411e6t"
         let userIDs = "ios-test-user-11"
         var body = Data()
         func appendFormField(_ name: String, value: String) {

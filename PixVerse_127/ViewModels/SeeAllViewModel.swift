@@ -19,7 +19,7 @@ class SeeAllViewModel: ObservableObject {
 
     func loadEffects() {
         isLoading = true
-        APIService.shared.fetchTemplatesByCategories(appName: "com.dmyver.skp1l3n", ai: ["pika", "pv"]) { [weak self] result in
+        APIService.shared.fetchTemplatesByCategories(bundleId: "com.ham.411e6t", ai: ["pika", "pv"]) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 switch result {

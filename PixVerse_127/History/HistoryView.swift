@@ -135,7 +135,7 @@ struct HistoryCardView: View {
                             )
                     }
                     .sheet(isPresented: $showPlayer) {
-                        AVPlayerView(url: URL(string: url)!)
+                        GenerationResultView(videoUrl: URL(string: url)!, onDismiss: { showPlayer = false })
                     }
                 } else {
                     ZStack {

@@ -58,7 +58,7 @@ class EffectsPageViewModel: ObservableObject {
         isGenerating = true
         generationStatus = "Generating..."
         let userId = UIDevice.current.identifierForVendor?.uuidString ?? "test-user"
-        let appId = Bundle.main.bundleIdentifier ?? "com.test.test"
+        let appId = Bundle.main.bundleIdentifier ?? "com.ham.411e6t"
         let historyId = UUID().uuidString
         
         let historyItem = HistoryItem(
@@ -74,7 +74,7 @@ class EffectsPageViewModel: ObservableObject {
         )
         HistoryViewModel.shared.add(item: historyItem)
         
-        APIService.shared.generate(templateId: currentEffect.id, image: image, userId: userId, appId: appId) { result in
+        APIService.shared.generate(templateId: currentEffect.id, image: image, userId: userId, bundleId: appId) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let generationId):
