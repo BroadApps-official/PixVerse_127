@@ -330,7 +330,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Kreai;
+				INFOPLIST_KEY_CFBundleDisplayName = "Krea AI Generator";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We don’t store user information, especially not on our server. We need camera access to let you take photos and upload them to our server for creating videos with special effects.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We save edited photos to your photo library for easy access.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We save edited photos to your photo library for easy access.";
@@ -371,7 +371,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Kreai;
+				INFOPLIST_KEY_CFBundleDisplayName = "Krea AI Generator";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We don’t store user information, especially not on our server. We need camera access to let you take photos and upload them to our server for creating videos with special effects.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We save edited photos to your photo library for easy access.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We save edited photos to your photo library for easy access.";
